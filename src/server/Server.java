@@ -50,6 +50,8 @@ public class Server {
         clientChannel.register(selector, SelectionKey.OP_READ);
 
         serverChannel.keyFor(selector).cancel();
+
+        System.out.println("Connected to the client");
     }
 
     public void serveClient() throws IOException {
@@ -64,6 +66,7 @@ public class Server {
         }
 
         int messageCode = messageCodeBuffer.getInt(0);
+        System.out.println("Received message with code " + messageCode);
         switch (messageCode) {
             case DISCONNECT:
                 disconnect();

@@ -23,20 +23,14 @@ public class Main {
 
         while (isRunning) {
             selector.select();
-            System.out.println(selector.selectedKeys());
 
             for (SelectionKey selectionKey : selector.selectedKeys()) {
                 if (selectionKey.isAcceptable()) {
-                    System.out.println("Accepting new client");
                     server.accept();
                 } else if (selectionKey.isReadable()) {
                     SelectableChannel selectableChannel = selectionKey.channel();
 
-                    if (selectableChannel instanceof SocketChannel) {
-                        System.out.println("Reading request from client");
-                        server.serveClient();
-                        continue;
-                    }
+                    if (selectableChannel instanceof SocketChannel) server.serveClient();
 
                     if (selectableChannel instanceof Pipe.SourceChannel) {
                         System.out.println("Reading console input");

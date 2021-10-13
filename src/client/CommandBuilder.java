@@ -18,8 +18,8 @@ public class CommandBuilder {
     private final static Map<String, GetComplexArgument> complexArgumentCommand = new HashMap<>();
 
     static {
-        basicArgumentCommand.put("remove_key", Integer::parseInt);
-        basicArgumentCommand.put("remove_lower_key", Integer::parseInt);
+        basicArgumentCommand.put("remove_key", Long::parseLong);
+        basicArgumentCommand.put("remove_lower_key", Long::parseLong);
         basicArgumentCommand.put("count_by_type", TicketType::valueOf);
         basicArgumentCommand.put("filter_starts_with_name", null);
         basicArgumentCommand.put("update", Long::parseLong);
