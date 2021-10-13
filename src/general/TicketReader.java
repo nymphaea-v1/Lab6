@@ -50,6 +50,7 @@ public class TicketReader {
      */
     public static Ticket readTicket(Iterator<String> iterator) throws IncorrectFieldException {
         List<Object> ticketFields = readObjectFields(iterator, ticketBasicReaders);
+
         ticketFields.add(createCoordinates(readObjectFields(iterator, coordinatesReaders)));
         ticketFields.add(createPerson(readObjectFields(iterator, personReaders)));
         ticketFields.addAll(readObjectFields(iterator, ticketExtraReaders));
@@ -71,9 +72,6 @@ public class TicketReader {
 
         ticketFields.add(readCoordinates(inputReader));
         ticketFields.add(readPerson(inputReader));
-
-        ticketFields.add(1L);
-        ticketFields.add(new Date());
 
         return createTicket(ticketFields);
     }
@@ -108,10 +106,13 @@ public class TicketReader {
         TicketType type = (TicketType) ticketFields.get(2);
         Coordinates coordinates = (Coordinates) ticketFields.get(3);
         Person person = (Person) ticketFields.get(4);
-        long id = (long) ticketFields.get(5);
+
+        if (ticketFields.size() == 5) return new Ticket(name, price, type, coordinates, person);
+
+        Long id = (Long) ticketFields.get(5);
         Date creationDate = (Date) ticketFields.get(6);
 
-        return new Ticket(name, price, type, coordinates, person, id, creationDate);
+        return new Ticket(name, price, type, coordinates,person).setExtraFields(id, creationDate);
     }
 
     private static Coordinates createCoordinates(List<Object> coordinatesFields) {

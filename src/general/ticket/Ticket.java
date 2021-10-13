@@ -8,23 +8,21 @@ import java.util.Iterator;
 import java.util.Objects;
 
 public class Ticket implements Serializable, Comparable<Ticket> {
-    private final transient long id;
-    private final transient Date creationDate;
+    private transient long id;
+    private transient Date creationDate;
 
-    private String name;
-    private int price;
-    private TicketType type;
-    private Coordinates coordinates;
-    private Person person;
+    private final String name;
+    private final int price;
+    private final TicketType type;
+    private final Coordinates coordinates;
+    private final Person person;
 
-    public Ticket(String name, int price, TicketType type, Coordinates coordinates, Person person, long id, Date creationDate) {
+    public Ticket(String name, int price, TicketType type, Coordinates coordinates, Person person) {
         this.name = name;
         this.price = price;
         this.type = type;
         this.coordinates = coordinates;
         this.person = person;
-        this.id = id;
-        this.creationDate = creationDate;
     }
 
     public String getName() {
@@ -55,12 +53,11 @@ public class Ticket implements Serializable, Comparable<Ticket> {
         return creationDate;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public Ticket setExtraFields(Long id, Date creationDate) {
+        this.id = id;
+        this.creationDate = creationDate;
 
-    public void setType(TicketType type) {
-        this.type = type;
+        return this;
     }
 
     public static long readId(Iterator<String> iterator) throws IncorrectFieldException {

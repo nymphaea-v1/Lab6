@@ -30,9 +30,9 @@ public class Update extends AbstractCommand {
 
         if (ticketToUpdate == null) return "No elements with id " + id + " found";
 
-        Ticket newTicket = new Ticket(ticket.getName(), ticket.getPrice(), ticket.getType(), ticket.getCoordinates(), ticket.getPerson(), ticketToUpdate.getValue().getId(), ticketToUpdate.getValue().getCreationDate());
+        ticket.setExtraFields(ticketToUpdate.getValue().getId(), ticketToUpdate.getValue().getCreationDate());
 
-        collectionManager.updateElement(ticketToUpdate.getKey(), newTicket);
+        collectionManager.updateElement(ticketToUpdate.getKey(), ticket);
 
         return "Element with id " + id + " has been updated";
     }

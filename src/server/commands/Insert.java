@@ -4,6 +4,8 @@ import general.ticket.Ticket;
 import server.CollectionManager;
 import commands2.CommandManager;
 
+import java.util.Date;
+
 /**
  * Complex command with an argument.
  * Inserts the new element with the specified key in the collection.
@@ -23,6 +25,7 @@ public class Insert  extends AbstractCommand {
     public String execute(Object basicArgument, Object complexArgument) {
         Long key = (Long) basicArgument;
         Ticket ticket = (Ticket) complexArgument;
+        ticket.setExtraFields(collectionManager.getNextId(), new Date());
 
         if (collectionManager.containsKey(key)) return "Element with key " + key + " has already existing";
 
