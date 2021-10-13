@@ -30,7 +30,7 @@ public class InputReader {
     /**
      * Starts reading input from console and processing it to command manager
      */
-    public void startReading(ServerSocket serverSocket) {
+    public void startReading(ServerConnector serverConnector) {
         Scanner consoleScanner = new Scanner(System.in).useDelimiter("\n");
         scanners.add(consoleScanner);
 
@@ -67,7 +67,7 @@ public class InputReader {
                 try {
                     if (executeScript(command, argument)) break;
 
-                    serverSocket.sendMessage(1, CommandBuilder.getCommand(this, command, argument));
+                    serverConnector.sendMessage(1, CommandBuilder.getCommand(this, command, argument));
                 } catch (IncorrectArgumentException | NoSuchCommandException | CancelCommandException e) {
                     System.out.println(command + ": " + e.getMessage());
 

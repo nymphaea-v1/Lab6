@@ -24,7 +24,6 @@ public class Server {
     public final Selector selector;
 
     private final ServerSocketChannel serverChannel;
-    private SocketChannel clientChannel;
     private final CommandManager commandManager;
 
     public Server(CommandManager commandManager) throws IOException {
@@ -38,30 +37,22 @@ public class Server {
         serverChannel.register(selector, SelectionKey.OP_ACCEPT);
     }
 
-    public boolean isConnected() {
-        return clientChannel != null && clientChannel.isConnected();
-    }
-
     public void accept() throws IOException {
-        if (isConnected()) return;
-
-        clientChannel = serverChannel.accept();
+        SocketChannel clientChannel = serverChannel.accept();
         clientChannel.configureBlocking(false);
         clientChannel.register(selector, SelectionKey.OP_READ);
 
-        serverChannel.keyFor(selector).cancel();
-
-        System.out.println("Connected to the client");
+        System.out.println("Client has connected");
     }
 
-    public void serveClient() throws IOException {
+    public void serveClient(SocketChannel clientChannel) throws IOException {
         if (clientChannel == null || !clientChannel.isConnected()) return;
 
         ByteBuffer messageCodeBuffer = ByteBuffer.allocate(4);
         try {
             if (clientChannel.read(messageCodeBuffer) != 4) return;
         } catch (SocketException e) {
-            disconnect();
+            disconnect(clientChannel);
             return;
         }
 
@@ -69,22 +60,20 @@ public class Server {
         System.out.println("Received message with code " + messageCode);
         switch (messageCode) {
             case DISCONNECT:
-                disconnect();
+                disconnect(clientChannel);
             case EXECUTE:
-                execute();
+                execute(clientChannel);
         }
     }
 
-    private void disconnect() throws IOException {
+    private void disconnect(SocketChannel clientChannel) throws IOException {
         System.out.println("Client has disconnected");
 
         clientChannel.keyFor(selector).cancel();
         clientChannel.close();
-
-        serverChannel.register(selector, SelectionKey.OP_ACCEPT);
     }
 
-    private void execute() throws IOException {
+    private void execute(SocketChannel clientChannel) throws IOException {
         ByteBuffer messageLengthBuffer = ByteBuffer.allocate(4);
         clientChannel.read(messageLengthBuffer);
         int messageLength = messageLengthBuffer.getInt(0);
@@ -106,10 +95,10 @@ public class Server {
         ByteBuffer resultBuffer = ByteBuffer.allocate(resultBytes.length + 4);
         resultBuffer.putInt(resultBytes.length).put(resultBytes);
 
-        sendExecuteAnswer(resultBuffer.array());
+        sendExecuteAnswer(clientChannel,resultBuffer.array());
     }
 
-    private void sendExecuteAnswer(byte[] answer) throws IOException {
+    private void sendExecuteAnswer(SocketChannel clientChannel, byte[] answer) throws IOException {
         ByteBuffer answerBuffer = ByteBuffer.allocate(answer.length + 4);
         answerBuffer.putInt(Server.EXECUTE_ANSWER);
         answerBuffer.put(answer);

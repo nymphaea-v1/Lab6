@@ -1,6 +1,5 @@
 package server;
 
-import general.exceptions.NoSuchCommandException;
 import server.commands.CommandManager;
 
 import java.io.IOException;
@@ -26,12 +25,11 @@ public class Main {
             selector.select();
 
             for (SelectionKey selectionKey : selector.selectedKeys()) {
-                if (selectionKey.isAcceptable()) {
-                    server.accept();
-                } else if (selectionKey.isReadable()) {
+                if (selectionKey.isAcceptable()) server.accept();
+                else if (selectionKey.isReadable()) {
                     SelectableChannel selectableChannel = selectionKey.channel();
 
-                    if (selectableChannel instanceof SocketChannel) server.serveClient();
+                    if (selectableChannel instanceof SocketChannel) server.serveClient((SocketChannel) selectableChannel);
 
                     if (selectableChannel instanceof Pipe.SourceChannel) {
                         System.out.println("Reading console input");

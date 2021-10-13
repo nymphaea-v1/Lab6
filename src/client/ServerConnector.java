@@ -6,16 +6,17 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 
-public class ServerSocket {
+public class ServerConnector {
     private final static int DISCONNECT = 0;
     private final static int EXECUTE = 1;
     private final static int EXECUTE_ANSWER = 2;
 
+    private final Socket serverSocket;
     private final OutputStream outputStream;
     private final BufferedInputStream inputStream;
 
-    ServerSocket() throws IOException {
-        Socket serverSocket = new Socket("localhost", 11111);
+    ServerConnector() throws IOException {
+        serverSocket = new Socket("localhost", 11111);
         outputStream = serverSocket.getOutputStream();
         inputStream = new BufferedInputStream(serverSocket.getInputStream());
         System.out.println("Connected to the server");
@@ -56,5 +57,9 @@ public class ServerSocket {
 
             System.out.println(answer.toString("UTF-8"));
         }
+    }
+
+    public boolean isConnected() {
+        return serverSocket.isConnected();
     }
 }

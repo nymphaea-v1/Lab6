@@ -6,10 +6,10 @@ import java.net.ConnectException;
 public class Main {
     public static void main(String[] args) throws IOException {
         try {
-            ServerSocket serverSocket = new ServerSocket();
+            ServerConnector serverConnector = new ServerConnector();
             InputReader inputReader = new InputReader();
 
-            inputReader.startReading(serverSocket);
+            inputReader.startReading(serverConnector);
         } catch (ConnectException e) {
             System.out.println(e.getMessage());
         }
