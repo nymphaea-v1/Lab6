@@ -23,16 +23,12 @@ public class ConsoleReaderThread extends Thread {
 
     @Override
     public void run() {
+        byte[] commandBuffer = new byte[4];
         while (true) {
             try {
-                if (System.in.available() >= 4) {
-                    byte[] commandByte = new byte[4];
-
-                    System.in.read(commandByte);
-                    System.in.skip(System.in.available());
-
-                    pipe.sink().write(ByteBuffer.wrap(commandByte));
-                }
+                if (System.in.read(commandBuffer) != 4) continue;
+                System.in.skip(System.in.available());
+                pipe.sink().write(ByteBuffer.wrap(commandBuffer));
             } catch (IOException ignored) {}
         }
     }

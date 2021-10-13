@@ -38,7 +38,7 @@ public class Main {
                         Pipe.SourceChannel pipeSource = (Pipe.SourceChannel) selectableChannel;
                         commandBuffer.clear();
                         pipeSource.read(commandBuffer);
-                        String command = new String(commandBuffer.array());
+                        String command = new String(commandBuffer.array()).trim();
 
                         if (command.equals("save")) {
                             collectionManager.save();
@@ -46,7 +46,7 @@ public class Main {
                         } else if (command.equals("exit")) {
                             collectionManager.save();
                             isRunning = false;
-                        }
+                        } else System.out.println(command + " is not a valid command. Available commands: save, exit");
                     }
                 }
 
