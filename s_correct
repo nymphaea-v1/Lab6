@@ -1,0 +1,24 @@
+show
+
+remove_greater
+a
+11
+VIP
+1
+2
+2021-05-04
+1.0
+2
+1234567890
+
+info
+
+show
+
+remove_any_by_person
+2021-05-04
+1
+2
+1234567890
+
+execute_script s_info
