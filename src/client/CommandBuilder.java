@@ -34,23 +34,26 @@ public class CommandBuilder {
 
     public static Command getCommand(InputReader inputReader, String name, String basicArgumentString) throws NoSuchCommandException, IncorrectArgumentException {
         if (simpleCommandList.contains(name)) return new Command(name, null, null);
+        if (!basicArgumentCommand.containsKey(name) && !complexArgumentCommand.containsKey(name)) throw new NoSuchCommandException();
 
         GetBasicArgument getBasicArgument = basicArgumentCommand.get(name);
         GetComplexArgument getComplexArgument = complexArgumentCommand.get(name);
 
-        if (getBasicArgument == null && getComplexArgument == null) throw new NoSuchCommandException();
-
         Serializable basicArgument = null;
         Serializable complexArgument = null;
 
-        if (getBasicArgument != null) {
-            try {
-                basicArgument = getBasicArgument.get(basicArgumentString);
-            } catch (IllegalArgumentException e) {
-                throw new IncorrectArgumentException(basicArgumentString);
-            }
+        if (basicArgumentCommand.containsKey(name)) {
+            if (basicArgumentString == null) throw new IncorrectArgumentException("no argument");
+
+            if (getBasicArgument != null) {
+                try {
+                    basicArgument = getBasicArgument.get(basicArgumentString);
+                } catch (IllegalArgumentException e) {
+                    throw new IncorrectArgumentException(basicArgumentString);
+                }
+            } else basicArgument = basicArgumentString;
         }
-        if (getComplexArgument != null) complexArgument = getComplexArgument.get(inputReader);
+        if (complexArgumentCommand.containsKey(name) && getComplexArgument != null) complexArgument = getComplexArgument.get(inputReader);
 
         return new Command(name, basicArgument, complexArgument);
     }

@@ -5,7 +5,10 @@ import general.ticket.Ticket;
 import server.CollectionManager;
 import commands2.CommandManager;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Complex command.
@@ -25,15 +28,15 @@ public class RemoveAnyByPerson extends AbstractCommand {
     @Override
     public String execute(Object basicArgument, Object complexArgument) {
         Person person = (Person) complexArgument;
+        int size = collectionManager.getSize();
 
-        for (Map.Entry<Long, Ticket> entry : collectionManager.getEntrySet()) {
-            if (!(entry.getValue().getPerson().equals(person))) continue;
+        collectionManager.getEntrySet().removeIf(element -> collectionManager.getSize() == size && element.getValue().getPerson().equals(person));
 
-            collectionManager.removeElement(entry.getKey());
+//        List<Map.Entry<Long, Ticket>> elementsList = collectionManager.getEntrySet().stream()
+//                .filter(element -> element.getValue().getPerson().equals(person))
+//                .collect(Collectors.toList());
 
-            return "One element with " + person + " has been removed";
-        }
-
-        return "There are no elements with " + person;
+        if (collectionManager.getSize() == size) return "There are no elements with " + person;
+        return "One element with " + person + " has been removed";
     }
 }

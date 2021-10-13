@@ -1,5 +1,6 @@
 package server;
 
+import general.exceptions.NoSuchCommandException;
 import server.commands.CommandManager;
 
 import java.io.IOException;

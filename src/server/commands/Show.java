@@ -24,6 +24,8 @@ public class Show extends AbstractCommand {
 
         if (size == 0) return "Collection is empty";
 
+        collectionManager.sortByName();
+
         String answer = "All elements of the collection:\n";
         answer += collectionManager.toString();
         answer += "A total of " + size + " elements";

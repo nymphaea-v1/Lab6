@@ -42,7 +42,7 @@ public class CollectionManager {
         }
 
         if (collection.size() != 0) {
-            sortByCreationDate(this);
+            sortByName();
             System.out.printf("Collection with %d elements has been initialized%n", getSize());
         } else System.out.println("This file does not contain any valid elements");
     }
@@ -213,13 +213,13 @@ public class CollectionManager {
         return element.getKey() + ", " + element.getValue().toCSV();
     }
 
-    private static void sortByCreationDate(CollectionManager collectionManager) {
-        LinkedHashMap<Long, Ticket> collectionClone = new LinkedHashMap<>(collectionManager.collection);
+    public void sortByName() {
+        List<Map.Entry<Long, Ticket>> elementsList = new ArrayList<>(collection.entrySet());
 
-        collectionManager.clear();
+        collection.clear();
 
-        collectionClone.entrySet().stream()
-                .sorted(Comparator.comparing(n -> n.getValue().getCreationDate()))
-                .forEach(element -> collectionManager.setElement(element.getKey(), element.getValue()));
+        elementsList.stream()
+                .sorted(Comparator.comparing(element -> element.getValue().getName()))
+                .forEach(element -> setElement(element.getKey(), element.getValue()));
     }
 }

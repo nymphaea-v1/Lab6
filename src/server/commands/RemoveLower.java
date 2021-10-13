@@ -25,7 +25,7 @@ public class RemoveLower extends AbstractCommand {
 
         int sizeBefore = collectionManager.getSize();
 
-        collectionManager.getEntrySet().removeIf(n -> n.getValue().compareTo(ticket) < 0);
+        collectionManager.getEntrySet().removeIf(element -> element.getValue().compareTo(ticket) < 0);
 
         return "Elements removed: " + (sizeBefore - collectionManager.getSize());
     }

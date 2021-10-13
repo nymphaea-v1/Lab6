@@ -22,7 +22,7 @@ public class RemoveKey extends AbstractCommand {
     public String execute(Object basicArgument, Object complexArgument) {
         Long key = (Long) basicArgument;
 
-        if (!collectionManager.removeElement(key)) return "No elements with key " + key + "found";
+        if (!collectionManager.removeElement(key)) return "No elements with key " + key + " found";
         return "Element with key" + key + " has been removed";
     }
 }

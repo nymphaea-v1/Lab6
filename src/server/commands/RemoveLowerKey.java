@@ -24,7 +24,7 @@ public class RemoveLowerKey extends AbstractCommand {
 
         int sizeBefore = collectionManager.getSize();
 
-        collectionManager.getEntrySet().removeIf(n -> n.getKey() < key);
+        collectionManager.getEntrySet().removeIf(element -> element.getKey() < key);
         return "Elements with key lower than " + key + " removed: " + (sizeBefore - collectionManager.getSize());
     }
 }
