@@ -10,7 +10,7 @@ import commands2.CommandManager;
  * @see CommandManager
  * @see CollectionManager
  */
-public class Show extends Executable {
+public class Show extends AbstractCommand {
     private final CollectionManager collectionManager;
 
     public Show(CollectionManager collectionManager) {

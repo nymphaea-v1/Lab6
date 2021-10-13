@@ -16,7 +16,7 @@ import java.util.Date;
  * @see CommandManager
  * @see CollectionManager
  */
-public class Info extends Executable {
+public class Info extends AbstractCommand {
     private final CollectionManager collectionManager;
     private final static String infoPattern = "Info about this collection:\nType: LinkedHashMap\nCreation date: %s\nLast modified date: %s\nNumber of elements: %d\n";
 

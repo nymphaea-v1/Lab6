@@ -11,7 +11,7 @@ import commands2.CommandManager;
  * @see CommandManager
  * @see CollectionManager
  */
-public class FilterStartsWithName extends Executable {
+public class FilterStartsWithName extends AbstractCommand {
     private final CollectionManager collectionManager;
 
     public FilterStartsWithName(CollectionManager collectionManager) {

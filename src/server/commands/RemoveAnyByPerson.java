@@ -14,7 +14,7 @@ import java.util.Map;
  * @see CommandManager
  * @see CollectionManager
  */
-public class RemoveAnyByPerson extends Executable {
+public class RemoveAnyByPerson extends AbstractCommand {
     private final CollectionManager collectionManager;
 
     public RemoveAnyByPerson(CollectionManager collectionManager) {

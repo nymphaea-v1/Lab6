@@ -13,7 +13,7 @@ import java.util.Map;
  * @see CommandManager
  * @see CollectionManager
  */
-public class Update extends Executable {
+public class Update extends AbstractCommand {
     private final CollectionManager collectionManager;
 
     public Update(CollectionManager collectionManager) {

@@ -12,7 +12,7 @@ import java.util.Map;
  * and allows user to manage it with given commands.
  */
 public class CommandManager {
-    private final Map<String, Executable> commandMap;
+    private final Map<String, AbstractCommand> commandMap;
 
     public CommandManager(CollectionManager collectionManager) {
         commandMap = new HashMap<>();
@@ -35,7 +35,7 @@ public class CommandManager {
         commandMap.put("insert", new Insert(collectionManager));
     }
 
-    public Map<String, Executable> getCommandMap() {
+    public Map<String, AbstractCommand> getCommandMap() {
         return commandMap;
     }
 
@@ -47,10 +47,10 @@ public class CommandManager {
      * @throws NoSuchCommandException thrown if there is no command with the specified name
      */
     public String execute(Command command) throws NoSuchCommandException {
-        Executable executable =  commandMap.get(command.name);
+        AbstractCommand abstractCommand =  commandMap.get(command.name);
 
-        if (executable == null) throw new NoSuchCommandException();
+        if (abstractCommand == null) throw new NoSuchCommandException();
 
-        return executable.execute(command.basicArgument, command.complexArgument);
+        return abstractCommand.execute(command.basicArgument, command.complexArgument);
     }
 }

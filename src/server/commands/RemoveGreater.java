@@ -11,7 +11,7 @@ import commands2.CommandManager;
  * @see CommandManager
  * @see CollectionManager
  */
-public class RemoveGreater extends Executable {
+public class RemoveGreater extends AbstractCommand {
     private final CollectionManager collectionManager;
 
     public RemoveGreater(CollectionManager collectionManager) {

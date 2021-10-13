@@ -6,7 +6,7 @@ package server.commands;
  *
  * @see CommandManager
  */
-public class Help extends Executable {
+public class Help extends AbstractCommand {
     private final CommandManager commandManager;
 
     public Help(CommandManager commandManager) {
@@ -18,11 +18,11 @@ public class Help extends Executable {
     public String execute(Object basicArgument, Object complexArgument) {
         StringBuilder answer = new StringBuilder("List of all available commands:");
 
-        for (Executable executable : commandManager.getCommandMap().values()) {
+        for (AbstractCommand abstractCommand : commandManager.getCommandMap().values()) {
             answer.append("\n");
-            answer.append(executable.getName());
+            answer.append(abstractCommand.getName());
             answer.append(" - ");
-            answer.append(executable.getDescription());
+            answer.append(abstractCommand.getDescription());
         }
 
         return answer.toString();

@@ -10,7 +10,7 @@ import commands2.CommandManager;
  * @see CommandManager
  * @see CollectionManager
  */
-public class RemoveLowerKey extends Executable {
+public class RemoveLowerKey extends AbstractCommand {
     private final CollectionManager collectionManager;
 
     public RemoveLowerKey(CollectionManager collectionManager) {

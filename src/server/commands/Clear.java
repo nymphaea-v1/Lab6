@@ -10,7 +10,7 @@ import commands2.CommandManager;
  * @see CommandManager
  * @see CollectionManager
  */
-public class Clear extends Executable {
+public class Clear extends AbstractCommand {
     private final CollectionManager collectionManager;
 
     public Clear(CollectionManager collectionManager) {

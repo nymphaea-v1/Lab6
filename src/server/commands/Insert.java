@@ -11,7 +11,7 @@ import commands2.CommandManager;
  * @see CommandManager
  * @see CollectionManager
  */
-public class Insert  extends Executable {
+public class Insert  extends AbstractCommand {
     private final CollectionManager collectionManager;
 
     public Insert(CollectionManager collectionManager) {

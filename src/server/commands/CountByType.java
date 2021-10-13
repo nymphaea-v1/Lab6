@@ -12,7 +12,7 @@ import commands2.CommandManager;
  * @see CommandManager
  * @see CollectionManager
  */
-public class CountByType extends Executable {
+public class CountByType extends AbstractCommand {
     private final CollectionManager collectionManager;
 
     public CountByType(CollectionManager collectionManager) {

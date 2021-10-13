@@ -11,7 +11,7 @@ import commands2.CommandManager;
  * @see CommandManager
  * @see CollectionManager
  */
-public class RemoveLower extends Executable {
+public class RemoveLower extends AbstractCommand {
     private final CollectionManager collectionManager;
 
     public RemoveLower(CollectionManager collectionManager) {

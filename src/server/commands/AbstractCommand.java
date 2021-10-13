@@ -1,17 +1,17 @@
 package server.commands;
 
-public abstract class Executable {
+public abstract class AbstractCommand {
     public final String name;
     public final String description;
     public final String pattern;
 
-    protected Executable(String name, String description, String pattern) {
+    protected AbstractCommand(String name, String description, String pattern) {
         this.name = name;
         this.description = description;
         this.pattern = pattern;
     }
 
-    public Executable(String name, String description) {
+    public AbstractCommand(String name, String description) {
         this.name = name;
         this.description = description;
         this.pattern = name;
