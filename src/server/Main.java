@@ -12,7 +12,12 @@ public class Main {
         CommandManager commandManager = new CommandManager(collectionManager);
         ByteBuffer commandBuffer = ByteBuffer.allocate(4);
 
-        Server server = new Server(commandManager);
+        int port = 11111;
+        try {
+            if (args.length != 0) port = Integer.parseInt(args[0]);
+        } catch (NumberFormatException ignored) {}
+
+        Server server = new Server(commandManager, port);
         Selector selector = server.selector;
 
         ConsoleReaderThread consoleReaderThread = new ConsoleReaderThread("consoleInputThread");

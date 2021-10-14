@@ -25,13 +25,13 @@ public class Server {
     private final ServerSocketChannel serverChannel;
     private final CommandManager commandManager;
 
-    public Server(CommandManager commandManager) throws IOException {
+    public Server(CommandManager commandManager, int port) throws IOException {
         this.commandManager = commandManager;
 
         selector = Selector.open();
 
         serverChannel = ServerSocketChannel.open();
-        serverChannel.bind(new InetSocketAddress(11111));
+        serverChannel.bind(new InetSocketAddress(port));
         serverChannel.configureBlocking(false);
         serverChannel.register(selector, SelectionKey.OP_ACCEPT);
     }
