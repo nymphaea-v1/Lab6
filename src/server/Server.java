@@ -102,12 +102,16 @@ public class Server {
     }
 
     private void sendAnswer(int messageCode, SocketChannel clientChannel, byte[] answer) throws IOException {
-        ByteBuffer answerBuffer = ByteBuffer.allocate(answer.length + 4);
+        int answerBufferLength = answer.length + 4;
+        ByteBuffer answerBuffer = ByteBuffer.allocate(answerBufferLength);
         answerBuffer.putInt(messageCode);
         answerBuffer.put(answer);
         answerBuffer.flip();
 
-        clientChannel.write(answerBuffer);
+        while (answerBufferLength > 0) {
+            answerBufferLength -= clientChannel.write(answerBuffer);
+        }
+
         System.out.println("Answer send: " + Arrays.toString(answerBuffer.array()));
     }
 }
