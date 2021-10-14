@@ -1,5 +1,6 @@
 package client;
 
+import general.Command;
 import general.Reader;
 import general.exceptions.*;
 
@@ -52,24 +53,26 @@ public class InputReader {
 
             if (next.isEmpty()) continue;
 
-            String command;
+            String commandString;
             String argument = null;
 
             int spaceIndex = next.indexOf(" ");
             if (spaceIndex != -1) {
-                command = next.substring(0, spaceIndex).toLowerCase();
+                commandString = next.substring(0, spaceIndex).toLowerCase();
                 argument = next.substring(spaceIndex + 1);
-            } else command = next.toLowerCase();
+            } else commandString = next.toLowerCase();
 
-            if (exit(command)) return;
+            if (exit(commandString)) return;
+
+            Command command = null;
 
             do {
                 try {
-                    if (executeScript(command, argument)) break;
+                    if (executeScript(commandString, argument)) break;
 
-                    serverConnector.sendMessage(1, CommandBuilder.getCommand(this, command, argument));
+                    command = CommandBuilder.getCommand(this, commandString, argument);
                 } catch (IncorrectArgumentException | NoSuchCommandException | CancelCommandException e) {
-                    System.out.println(command + ": " + e.getMessage());
+                    System.out.println(commandString + ": " + e.getMessage());
 
                     if (!fromConsole) toConsole();
                     else if (e instanceof NoSuchCommandException) System.out.println("Type help to get a list of all available commands");
@@ -87,11 +90,21 @@ public class InputReader {
 
                         System.out.println("Current command execution has been cancelled");
                     }
-                } catch (IOException e) {
-                    System.out.println(e.getMessage());
                 }
 
                 break;
+            } while (true);
+
+            if (command == null) continue;
+
+            do {
+                try {
+                    serverConnector.sendMessage(1, command);
+                    break;
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                    serverConnector.connect();
+                }
             } while (true);
         }
     }

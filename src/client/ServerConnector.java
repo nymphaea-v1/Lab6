@@ -4,6 +4,7 @@ import general.Command;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 
 public class ServerConnector {
@@ -11,15 +12,42 @@ public class ServerConnector {
     private final static int EXECUTE = 1;
     private final static int EXECUTE_ANSWER = 2;
 
-    private final Socket serverSocket;
-    private final OutputStream outputStream;
-    private final BufferedInputStream inputStream;
+    private final SocketAddress socketAddress;
+    private Socket socket;
+    private OutputStream outputStream;
+    private BufferedInputStream inputStream;
 
-    ServerConnector() throws IOException {
-        serverSocket = new Socket("localhost", 11111);
-        outputStream = serverSocket.getOutputStream();
-        inputStream = new BufferedInputStream(serverSocket.getInputStream());
-        System.out.println("Connected to the server");
+    ServerConnector(SocketAddress socketAddress) {
+        this.socketAddress = socketAddress;
+        connect();
+    }
+
+    public void connect() {
+        if (socket != null && !socket.isConnected()) {
+            System.out.println("Already connected to the server");
+            return;
+        }
+
+        while (true) {
+            System.out.println("Connecting to the server");
+
+            try {
+                socket = new Socket();
+                socket.connect(socketAddress, 0);
+
+                outputStream = socket.getOutputStream();
+                inputStream = new BufferedInputStream(socket.getInputStream());
+
+                System.out.println("Successfully connected to the server");
+                break;
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException ignored) {}
+            }
+        }
     }
 
     public void sendMessage(int messageCode, Serializable object) throws IOException {
@@ -57,9 +85,5 @@ public class ServerConnector {
 
             System.out.println(answer.toString("UTF-8"));
         }
-    }
-
-    public boolean isConnected() {
-        return serverSocket.isConnected();
     }
 }

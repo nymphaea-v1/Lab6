@@ -1,17 +1,12 @@
 package client;
 
-import java.io.IOException;
-import java.net.ConnectException;
+import java.net.InetSocketAddress;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        try {
-            ServerConnector serverConnector = new ServerConnector();
-            InputReader inputReader = new InputReader();
+    public static void main(String[] args) {
+        ServerConnector serverConnector = new ServerConnector(new InetSocketAddress("localhost", 11111));
+        InputReader inputReader = new InputReader();
 
-            inputReader.startReading(serverConnector);
-        } catch (ConnectException e) {
-            System.out.println(e.getMessage());
-        }
+        inputReader.startReading(serverConnector);
     }
 }
