@@ -1,15 +1,11 @@
 package server.commands;
 
+import general.ExecutionResult;
 import general.ticket.Ticket;
 import server.CollectionManager;
 import commands2.CommandManager;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-
 /**
  * Basic command with an argument.
  * Displays all the elements of the collection whose name starts with the given substring.
@@ -26,19 +22,26 @@ public class FilterStartsWithName extends AbstractCommand {
     }
 
     @Override
-    public String execute(Object basicArgument, Object complexArgument) {
+    public ExecutionResult<Ticket[]> execute(Object basicArgument, Object complexArgument) {
         String name = (String) basicArgument;
 
-        StringBuilder answer = new StringBuilder("Elements found: ");
-        List<String> tickets = new ArrayList<>();
-
-        collectionManager.getValues().stream()
+        Ticket[] tickets = collectionManager.getValues().stream()
                 .filter(ticket -> ticket.getName().startsWith(name))
-                .forEach(ticket -> tickets.add("\n" + ticket.toString()));
+                .toArray(Ticket[]::new);
 
-        answer.append(tickets.size());
-        tickets.forEach(answer::append);
+        return new ThisExecutionResult(true, "Elements found: %d\n", tickets);
+    }
 
-        return answer.toString();
+    private static class ThisExecutionResult extends ExecutionResult<Ticket[]> {
+
+        public ThisExecutionResult(boolean isSuccess, String description, Ticket[] result) {
+            super(isSuccess, description, result);
+        }
+
+        @Override
+        public void printResult() {
+            System.out.printf(description, result.length);
+            Arrays.stream(result).forEach(System.out::println);
+        }
     }
 }

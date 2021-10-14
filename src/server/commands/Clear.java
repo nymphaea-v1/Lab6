@@ -1,5 +1,6 @@
 package server.commands;
 
+import general.ExecutionResult;
 import server.CollectionManager;
 import commands2.CommandManager;
 
@@ -19,8 +20,8 @@ public class Clear extends AbstractCommand {
     }
 
     @Override
-    public String execute(Object basicArgument, Object complexArgument) {
+    public ExecutionResult<String> execute(Object basicArgument, Object complexArgument) {
         collectionManager.clear();
-        return "Collection has been cleared";
+        return new ExecutionResult<>(true, "Collection has been cleared");
     }
 }

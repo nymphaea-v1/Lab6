@@ -1,5 +1,6 @@
 package server.commands;
 
+import general.ExecutionResult;
 import general.ticket.Ticket;
 import server.CollectionManager;
 import commands2.CommandManager;
@@ -20,13 +21,13 @@ public class RemoveLower extends AbstractCommand {
     }
 
     @Override
-    public String execute(Object basicArgument, Object complexArgument) {
+    public ExecutionResult<Integer> execute(Object basicArgument, Object complexArgument) {
         Ticket ticket = (Ticket) complexArgument;
 
         int sizeBefore = collectionManager.getSize();
 
         collectionManager.getEntrySet().removeIf(element -> element.getValue().compareTo(ticket) < 0);
 
-        return "Elements removed: " + (sizeBefore - collectionManager.getSize());
+        return new ExecutionResult<>(true, "Elements removed: %d", sizeBefore - collectionManager.getSize());
     }
 }

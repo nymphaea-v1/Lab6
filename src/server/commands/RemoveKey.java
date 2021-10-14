@@ -1,5 +1,6 @@
 package server.commands;
 
+import general.ExecutionResult;
 import server.CollectionManager;
 import commands2.CommandManager;
 
@@ -19,10 +20,10 @@ public class RemoveKey extends AbstractCommand {
     }
 
     @Override
-    public String execute(Object basicArgument, Object complexArgument) {
+    public ExecutionResult<Long> execute(Object basicArgument, Object complexArgument) {
         Long key = (Long) basicArgument;
 
-        if (!collectionManager.removeElement(key)) return "No elements with key " + key + " found";
-        return "Element with key" + key + " has been removed";
+        if (!collectionManager.removeElement(key)) return new ExecutionResult<>(false, "No elements with key %d found", key);
+        return new ExecutionResult<>(true, "Element with key %d has been removed", key);
     }
 }

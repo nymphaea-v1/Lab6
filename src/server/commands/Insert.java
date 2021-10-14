@@ -1,5 +1,6 @@
 package server.commands;
 
+import general.ExecutionResult;
 import general.ticket.Ticket;
 import server.CollectionManager;
 import commands2.CommandManager;
@@ -22,14 +23,15 @@ public class Insert  extends AbstractCommand {
     }
 
     @Override
-    public String execute(Object basicArgument, Object complexArgument) {
+    public ExecutionResult<Long> execute(Object basicArgument, Object complexArgument) {
         Long key = (Long) basicArgument;
         Ticket ticket = (Ticket) complexArgument;
+
         ticket.setExtraFields(collectionManager.getNextId(), new Date());
 
-        if (collectionManager.containsKey(key)) return "Element with key " + key + " has already existing";
+        if (collectionManager.containsKey(key)) return new ExecutionResult<>(false, "Element with key %d has already existing", key);
 
         collectionManager.setElement(key, ticket);
-        return "Ticket with key " + key + " has been added to the collection";
+        return new ExecutionResult<>(true, "Ticket with key %d has been added to the collection", key);
     }
 }

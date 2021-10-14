@@ -1,6 +1,7 @@
 package client;
 
 import general.Command;
+import general.ExecutionResult;
 
 import java.io.*;
 import java.net.Socket;
@@ -78,12 +79,12 @@ public class ServerConnector {
         int answerCode = answerStream.readInt();
 
         if (answerCode == EXECUTE_ANSWER) {
-            ByteArrayOutputStream answer = new ByteArrayOutputStream();
             int answerLength = answerStream.readInt();
-
-            for (int i = 0; i < answerLength; i++) answer.write(answerStream.read());
-
-            System.out.println(answer.toString("UTF-8"));
+            ObjectInputStream resultObjectStream = new ObjectInputStream(inputStream);
+            try {
+                ExecutionResult<?> executionResult = (ExecutionResult<?>) resultObjectStream.readObject();
+                executionResult.printResult();
+            } catch (ClassNotFoundException ignored) {}
         }
     }
 }

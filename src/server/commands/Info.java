@@ -1,5 +1,6 @@
 package server.commands;
 
+import general.ExecutionResult;
 import server.CollectionManager;
 import commands2.CommandManager;
 
@@ -18,7 +19,6 @@ import java.util.Date;
  */
 public class Info extends AbstractCommand {
     private final CollectionManager collectionManager;
-    private final static String infoPattern = "Info about this collection:\nType: LinkedHashMap\nCreation date: %s\nLast modified date: %s\nNumber of elements: %d\n";
 
     public Info(CollectionManager collectionManager) {
         super("info", "display information about this collection");
@@ -26,8 +26,10 @@ public class Info extends AbstractCommand {
     }
 
     @Override
-    public String execute(Object basicArgument, Object complexArgument) {
+    public ExecutionResult<String[]> execute(Object basicArgument, Object complexArgument) {
+        String infoPattern = "Info about this collection:\nType: LinkedHashMap\nCreation date: %s\nLast modified date: %s\nNumber of elements: %s";
         Path filePath = collectionManager.getFilePath();
+
         String createTime = null;
         String updateTime = null;
 
@@ -36,6 +38,6 @@ public class Info extends AbstractCommand {
             updateTime = new Date(Files.getLastModifiedTime(filePath).toMillis()).toString();
         } catch (IOException | NullPointerException ignored) {}
 
-        return String.format(infoPattern, createTime, updateTime, collectionManager.getSize());
+        return new ExecutionResult<>(true, infoPattern, new String[] {createTime, updateTime, String.valueOf(collectionManager.getSize())});
     }
 }

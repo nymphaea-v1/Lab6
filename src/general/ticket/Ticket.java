@@ -8,8 +8,8 @@ import java.util.Iterator;
 import java.util.Objects;
 
 public class Ticket implements Serializable, Comparable<Ticket> {
-    private transient long id;
-    private transient Date creationDate;
+    private long id;
+    private Date creationDate;
 
     private final String name;
     private final int price;

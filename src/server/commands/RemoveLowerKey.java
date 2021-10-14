@@ -1,5 +1,6 @@
 package server.commands;
 
+import general.ExecutionResult;
 import server.CollectionManager;
 import commands2.CommandManager;
 
@@ -19,12 +20,12 @@ public class RemoveLowerKey extends AbstractCommand {
     }
 
     @Override
-    public String execute(Object basicArgument, Object complexArgument) {
+    public ExecutionResult<Number[]> execute(Object basicArgument, Object complexArgument) {
         Long key = (Long) basicArgument;
 
         int sizeBefore = collectionManager.getSize();
 
         collectionManager.getEntrySet().removeIf(element -> element.getKey() < key);
-        return "Elements with key lower than " + key + " removed: " + (sizeBefore - collectionManager.getSize());
+        return new ExecutionResult<>(true, "Elements with key lower than %d removed: %d", new Number[] {key, sizeBefore - collectionManager.getSize()});
     }
 }

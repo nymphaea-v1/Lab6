@@ -1,5 +1,6 @@
 package server.commands;
 
+import general.ExecutionResult;
 import general.ticket.TicketType;
 import server.CollectionManager;
 import commands2.CommandManager;
@@ -20,13 +21,13 @@ public class CountByType extends AbstractCommand {
     }
 
     @Override
-    public String execute(Object basicArgument, Object complexArgument) {
+    public ExecutionResult<Long> execute(Object basicArgument, Object complexArgument) {
         TicketType type = (TicketType) basicArgument;
 
         long count = collectionManager.getValues().stream()
                 .filter(element -> element.getType().equals(type))
                 .count();
 
-        return "Elements found: " + count;
+        return new ExecutionResult<>(true, "Elements found: %d", count);
     }
 }

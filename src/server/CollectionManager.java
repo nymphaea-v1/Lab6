@@ -99,6 +99,10 @@ public class CollectionManager {
         return collection.entrySet();
     }
 
+    public LinkedHashMap<Long, Ticket> getCollection() {
+        return collection;
+    }
+
     /**
      * Can be used to perform a search through the collection.
      *
@@ -173,20 +177,6 @@ public class CollectionManager {
         }
 
         outputStreamWriter.close();
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder answer = new StringBuilder();
-
-        for (Map.Entry<Long, Ticket> element : collection.entrySet()) {
-            answer.append(element.getKey());
-            answer.append(": ");
-            answer.append(element.getValue());
-            answer.append("\n");
-        }
-
-        return answer.toString();
     }
 
     private void addFromFile(Path filePath) throws IOException {

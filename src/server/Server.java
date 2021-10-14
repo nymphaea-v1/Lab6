@@ -1,12 +1,11 @@
 package server;
 
 import general.Command;
+import general.ExecutionResult;
 import general.exceptions.NoSuchCommandException;
 import server.commands.CommandManager;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
@@ -82,25 +81,29 @@ public class Server {
         clientChannel.read(messageBuffer);
 
         ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(messageBuffer.array()));
-        String result;
+        ExecutionResult<?> result;
 
         try {
             Command command = (Command) objectInputStream.readObject();
             result = commandManager.execute(command);
         } catch (ClassNotFoundException | ClassCastException | NoSuchCommandException e) {
-            result = "Incorrect command or argument";
+            result = new ExecutionResult<>(false, "Incorrect command or argument");
         }
 
-        byte[] resultBytes = result.getBytes();
+        ByteArrayOutputStream resultBytesStream = new ByteArrayOutputStream();
+        ObjectOutputStream resultObjectStream = new ObjectOutputStream(resultBytesStream);
+        resultObjectStream.writeObject(result);
+        byte[] resultBytes = resultBytesStream.toByteArray();
+
         ByteBuffer resultBuffer = ByteBuffer.allocate(resultBytes.length + 4);
         resultBuffer.putInt(resultBytes.length).put(resultBytes);
 
-        sendExecuteAnswer(clientChannel,resultBuffer.array());
+        sendAnswer(EXECUTE_ANSWER, clientChannel, resultBuffer.array());
     }
 
-    private void sendExecuteAnswer(SocketChannel clientChannel, byte[] answer) throws IOException {
+    private void sendAnswer(int messageCode, SocketChannel clientChannel, byte[] answer) throws IOException {
         ByteBuffer answerBuffer = ByteBuffer.allocate(answer.length + 4);
-        answerBuffer.putInt(Server.EXECUTE_ANSWER);
+        answerBuffer.putInt(messageCode);
         answerBuffer.put(answer);
         answerBuffer.flip();
 

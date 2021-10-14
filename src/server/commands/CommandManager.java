@@ -1,6 +1,7 @@
 package server.commands;
 
 import general.Command;
+import general.ExecutionResult;
 import general.exceptions.NoSuchCommandException;
 import server.CollectionManager;
 
@@ -46,7 +47,7 @@ public class CommandManager {
      * @return results of the execution
      * @throws NoSuchCommandException thrown if there is no command with the specified name
      */
-    public String execute(Command command) throws NoSuchCommandException {
+    public ExecutionResult<?> execute(Command command) throws NoSuchCommandException {
         AbstractCommand abstractCommand =  commandMap.get(command.name);
 
         if (abstractCommand == null) throw new NoSuchCommandException();

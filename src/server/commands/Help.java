@@ -1,5 +1,11 @@
 package server.commands;
 
+import general.ExecutionResult;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Basic command.
  * Displays all available commands with descriptions given in their fields.
@@ -15,16 +21,26 @@ public class Help extends AbstractCommand {
     }
 
     @Override
-    public String execute(Object basicArgument, Object complexArgument) {
-        StringBuilder answer = new StringBuilder("List of all available commands:");
-
+    public ExecutionResult<String[]> execute(Object basicArgument, Object complexArgument) {
+        List<String> abstractCommandsList = new ArrayList<>();
         for (AbstractCommand abstractCommand : commandManager.getCommandMap().values()) {
-            answer.append("\n");
-            answer.append(abstractCommand.getName());
-            answer.append(" - ");
-            answer.append(abstractCommand.getDescription());
+            abstractCommandsList.add(abstractCommand.getFullDescription());
+        }
+        String[] abstractCommands = abstractCommandsList.toArray(new String[0]);
+
+        return new ThisExecutionResult(true, "List of all available commands:", abstractCommands);
+    }
+
+    private static class ThisExecutionResult extends ExecutionResult<String[]> {
+
+        public ThisExecutionResult(boolean isSuccess, String description, String[] result) {
+            super(isSuccess, description, result);
         }
 
-        return answer.toString();
+        @Override
+        public void printResult() {
+            System.out.println(description);
+            Arrays.stream(result).forEach(System.out::println);
+        }
     }
 }

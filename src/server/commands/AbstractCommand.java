@@ -1,6 +1,10 @@
 package server.commands;
 
-public abstract class AbstractCommand {
+import general.ExecutionResult;
+
+import java.io.Serializable;
+
+public abstract class AbstractCommand implements Serializable {
     public final String name;
     public final String description;
     public final String pattern;
@@ -21,13 +25,9 @@ public abstract class AbstractCommand {
         return name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getFullDescription() {
+        return pattern + " - " + description;
     }
 
-    public String getPattern() {
-        return pattern;
-    }
-
-    abstract String execute(Object basicArgument, Object complexArgument);
+    abstract ExecutionResult<?> execute(Object basicArgument, Object complexArgument);
 }
