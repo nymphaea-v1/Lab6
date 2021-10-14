@@ -49,7 +49,7 @@ public class Server {
 
         ByteBuffer messageCodeBuffer = ByteBuffer.allocate(4);
         try {
-            if (clientChannel.read(messageCodeBuffer) != 4) return;
+            while (messageCodeBuffer.position() != 4) clientChannel.read(messageCodeBuffer);
         } catch (SocketException e) {
             disconnect(clientChannel);
             return;
@@ -74,11 +74,11 @@ public class Server {
 
     private void execute(SocketChannel clientChannel) throws IOException {
         ByteBuffer messageLengthBuffer = ByteBuffer.allocate(4);
-        clientChannel.read(messageLengthBuffer);
+        while (messageLengthBuffer.position() != 4) clientChannel.read(messageLengthBuffer);
         int messageLength = messageLengthBuffer.getInt(0);
 
         ByteBuffer messageBuffer = ByteBuffer.allocate(messageLength);
-        clientChannel.read(messageBuffer);
+        while (messageBuffer.position() != messageLength) clientChannel.read(messageBuffer);
 
         ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(messageBuffer.array()));
         ExecutionResult<?> result;
