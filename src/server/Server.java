@@ -12,6 +12,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.Arrays;
 
 public class Server {
     private final static int DISCONNECT = 0;
@@ -47,6 +48,8 @@ public class Server {
 
         ByteBuffer messageCodeBuffer = ByteBuffer.allocate(4);
         try {
+            clientChannel.read(messageCodeBuffer);
+            if (messageCodeBuffer.position() == 0) throw new IOException();
             while (messageCodeBuffer.position() != 4) clientChannel.read(messageCodeBuffer);
         } catch (IOException e) {
             disconnect(clientChannel);
