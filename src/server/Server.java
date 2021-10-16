@@ -7,13 +7,11 @@ import server.commands.CommandManager;
 
 import java.io.*;
 import java.net.InetSocketAddress;
-import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.Arrays;
 
 public class Server {
     private final static int DISCONNECT = 0;
@@ -44,13 +42,13 @@ public class Server {
         System.out.println("Client has connected");
     }
 
-    public void serveClient(SocketChannel clientChannel) throws IOException {
+    public void serveClient(SocketChannel clientChannel) {
         if (clientChannel == null || !clientChannel.isConnected()) return;
 
         ByteBuffer messageCodeBuffer = ByteBuffer.allocate(4);
         try {
             while (messageCodeBuffer.position() != 4) clientChannel.read(messageCodeBuffer);
-        } catch (SocketException e) {
+        } catch (IOException e) {
             disconnect(clientChannel);
             return;
         }
@@ -61,15 +59,21 @@ public class Server {
             case DISCONNECT:
                 disconnect(clientChannel);
             case EXECUTE:
-                execute(clientChannel);
+                try {
+                    execute(clientChannel);
+                } catch (IOException e) {
+                    disconnect(clientChannel);
+                }
         }
     }
 
-    private void disconnect(SocketChannel clientChannel) throws IOException {
+    private void disconnect(SocketChannel clientChannel) {
         System.out.println("Client has disconnected");
 
         clientChannel.keyFor(selector).cancel();
-        clientChannel.close();
+        try {
+            clientChannel.close();
+        } catch (IOException ignored) {}
     }
 
     private void execute(SocketChannel clientChannel) throws IOException {
@@ -112,6 +116,6 @@ public class Server {
             answerBufferLength -= clientChannel.write(answerBuffer);
         }
 
-        System.out.println("Answer send: " + Arrays.toString(answerBuffer.array()));
+        System.out.println("Answer was sent");
     }
 }

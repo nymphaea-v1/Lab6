@@ -31,7 +31,7 @@ public class InputReader {
     /**
      * Starts reading input from console and processing it to command manager
      */
-    public void startReading(ServerConnector serverConnector) {
+    public void startReading(ServerConnector serverConnector) throws IOException {
         Scanner consoleScanner = new Scanner(System.in).useDelimiter("\n");
         scanners.add(consoleScanner);
 

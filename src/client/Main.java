@@ -1,5 +1,6 @@
 package client;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
@@ -19,9 +20,13 @@ public class Main {
         InetSocketAddress socketAddress = inetAddress == null
                 ? new InetSocketAddress("localhost", port)
                 : new InetSocketAddress(inetAddress, port);
-        ServerConnector serverConnector = new ServerConnector(socketAddress);
-        InputReader inputReader = new InputReader();
+        try {
+            ServerConnector serverConnector = new ServerConnector(socketAddress);
+            InputReader inputReader = new InputReader();
 
-        inputReader.startReading(serverConnector);
+            inputReader.startReading(serverConnector);
+        } catch (IOException e) {
+            System.out.println("Exiting program");
+        }
     }
 }
